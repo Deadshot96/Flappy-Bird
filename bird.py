@@ -12,6 +12,6 @@ class Bird:
 
 
     def draw(self, win: pygame.Surface) -> None:
-        pygame.draw.circle(win, self.color, (self.x, self.y), self.size // 2)
+        pygame.draw.circle(win, self.color, (self.x, self.y), self.size)
 
 

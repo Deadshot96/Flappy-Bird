@@ -3,6 +3,7 @@ import os
 import time
 import math
 from settings import *
+from bird import Bird
 
 
 class Game:
@@ -18,6 +19,7 @@ class Game:
         self.background_index = 0
         self.base = None
         self.baseX = BASE_WIDTH
+        self.bird = None
 
     def draw(self, win: pygame.Surface) -> None:
         win.fill(MID_BLACK)
@@ -27,6 +29,8 @@ class Game:
         
         # win.blit(self.base, (0, 0))
         self.draw_base(self.win)
+        self.bird.draw(self.win)
+        
         pygame.display.update()
 
     def load_images(self):
@@ -48,6 +52,8 @@ class Game:
 
         self.clock = pygame.time.Clock()
         pygame.time.set_timer(self.tickEvent, 1200)
+
+        self.bird = Bird()
 
         self.load_images()
 
