@@ -12,6 +12,8 @@ class Bird:
         self.gravity = 0.25
         self.vy = 0
         self.image = None
+        self.angle = 0
+        self.bird_index = 0
 
         self.load_images()
 
@@ -19,12 +21,14 @@ class Bird:
     def draw(self, win: pygame.Surface) -> None:
 
         if self.vy < 0:
-            self.image = self.downflap
+            self.angle = 20
         elif self.vy > 0:
-            self.image = self.upflap
+            self.angle = -20
         else:
-            self.image = self.midflap
+            self.angle = 0
 
+        self.image = [self.upflap, self.midflap, self.downflap][self.bird_index // 10]
+        self.image = pygame.transform.rotate(self.image, self.angle)
         self.rect = self.image.get_rect()
         self.rect.center = (self.x, self.y)
 
@@ -36,6 +40,10 @@ class Bird:
         self.vy += self.gravity
         self.y += self.vy
         self.y = int(self.y)
+
+        self.bird_index += 1
+        if self.bird_index == 30:
+            self.bird_index = 0
 
     def jump(self):
         self.vy = -8
