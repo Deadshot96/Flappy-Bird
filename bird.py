@@ -11,12 +11,26 @@ class Bird:
         self.color = YELLOW
         self.gravity = 0.25
         self.vy = 0
+        self.image = None
 
         self.load_images()
 
 
     def draw(self, win: pygame.Surface) -> None:
-        pygame.draw.circle(win, self.color, (self.x, self.y), self.size // 2)
+
+        if self.vy < 0:
+            self.image = self.downflap
+        elif self.vy > 0:
+            self.image = self.upflap
+        else:
+            self.image = self.midflap
+
+        self.rect = self.image.get_rect()
+        self.rect.center = (self.x, self.y)
+
+        win.blit(self.image, self.rect)
+
+        # pygame.draw.circle(win, self.color, (self.x, self.y), self.size // 2)
 
     def move(self):
         self.vy += self.gravity
