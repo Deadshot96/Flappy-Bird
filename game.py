@@ -17,6 +17,8 @@ class Game:
     def draw(self, win: pygame.Surface) -> None:
         win.fill(MID_BLACK)
 
+        pygame.display.update()
+
     def game_init(self):
 
         self.win = pygame.display.set_mode((self.width, self.height))
