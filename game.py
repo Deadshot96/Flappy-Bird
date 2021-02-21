@@ -16,6 +16,8 @@ class Game:
         self.backgrounds = []
         self.tickEvent = pygame.USEREVENT
         self.background_index = 0
+        self.base = None
+        self.baseX = BASE_WIDTH
 
     def draw(self, win: pygame.Surface) -> None:
         win.fill(MID_BLACK)
@@ -23,7 +25,8 @@ class Game:
         index = self.background_index // 10
         win.blit(self.backgrounds[index], (0, 0))
         
-        
+        # win.blit(self.base, (0, 0))
+        self.draw_base(self.win)
         pygame.display.update()
 
     def load_images(self):
@@ -35,6 +38,8 @@ class Game:
 
         self.backgrounds = [background_day, background_night]
 
+        self.base = pygame.image.load(os.path.join(ASSET_DIR, 'base.png')).convert()
+        self.base = pygame.transform.scale(self.base, (BASE_WIDTH, BASE_HEIGHT))
 
     def game_init(self):
 
@@ -46,10 +51,18 @@ class Game:
 
         self.load_images()
 
-    def quit(self):
+    def quit(self) -> None:
         pygame.font.quit()
         pygame.quit()
 
+    def draw_base(self, win: pygame.Surface) -> None:
+        if self.baseX <= 0:
+            self.baseX = BASE_WIDTH
+
+        self.baseX -= 2
+
+        win.blit(self.base, (self.baseX - BASE_WIDTH, self.height - BASE_HEIGHT))
+        win.blit(self.base, (self.baseX, self.height - BASE_HEIGHT))
 
 
     def run(self):
@@ -74,7 +87,7 @@ class Game:
                     self.background_index += 1
                     if self.background_index == 20:
                         self.background_index = 0
-                    print(self.background_index)
+                    # print(self.background_index)
 
                     
             self.draw(self.win)
