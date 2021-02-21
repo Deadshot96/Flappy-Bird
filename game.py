@@ -30,7 +30,7 @@ class Game:
         # win.blit(self.base, (0, 0))
         self.draw_base(self.win)
         self.bird.draw(self.win)
-        
+
         pygame.display.update()
 
     def load_images(self):
@@ -88,6 +88,12 @@ class Game:
                     x, y = pos
                     col = self.win.get_at(pos)
                     print(x, y, col, sep='\t')
+
+                if event.type == pygame.KEYDOWN:
+                    keys = pygame.key.get_pressed()
+
+                    if keys[pygame.K_SPACE]:
+                        self.bird.jump()
 
                 if event.type == self.tickEvent:
                     self.background_index += 1
