@@ -29,6 +29,8 @@ class Game:
         
         # win.blit(self.base, (0, 0))
         self.draw_base(self.win)
+
+        self.bird.move()
         self.bird.draw(self.win)
 
         pygame.display.update()
