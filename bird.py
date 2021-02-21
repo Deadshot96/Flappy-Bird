@@ -12,10 +12,12 @@ class Bird:
         self.gravity = 0.25
         self.vy = 0
 
+        self.load_images()
+
 
     def draw(self, win: pygame.Surface) -> None:
         self.move()
-        pygame.draw.circle(win, self.color, (self.x, self.y), self.size)
+        pygame.draw.circle(win, self.color, (self.x, self.y), self.size // 2)
 
     def move(self):
         self.vy += self.gravity
@@ -24,4 +26,13 @@ class Bird:
 
     def jump(self):
         self.vy = -8
+
+    def load_images(self):
+        self.upflap = pygame.image.load(os.path.join(ASSET_DIR, 'upflap.png'))
+        self.midflap = pygame.image.load(os.path.join(ASSET_DIR, 'midflap.png'))
+        self.downflap = pygame.image.load(os.path.join(ASSET_DIR, 'downflap.png'))
+
+        self.upflap = pygame.transform.scale(self.upflap, (self.size, self.size))
+        self.midflap = pygame.transform.scale(self.midflap, (self.size, self.size))
+        self.downflap = pygame.transform.scale(self.downflap, (self.size, self.size))
 
