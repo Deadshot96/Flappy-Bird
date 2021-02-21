@@ -16,7 +16,6 @@ class Bird:
 
 
     def draw(self, win: pygame.Surface) -> None:
-        self.move()
         pygame.draw.circle(win, self.color, (self.x, self.y), self.size // 2)
 
     def move(self):
