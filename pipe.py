@@ -57,3 +57,10 @@ class Pipe:
 
         self.imgBtmRect = self.imageBtm.get_rect()
         self.imgBtmRect.topleft = (self.x, self.y)
+
+    def isColliding(self, x: int, y: int) -> bool:
+        bird = pygame.rect.Rect(0, 0, BIRD_SIZE, BIRD_SIZE)
+        bird.center = x, y
+        self.update_rects()
+
+        return self.imgUprRect.colliderect(bird) or self.imgBtmRect.colliderect(bird)
