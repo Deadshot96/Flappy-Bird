@@ -4,12 +4,12 @@ from random import randrange
 
 class Pipe:
 
-    def __init__(self):
-        self.x = 80
+    def __init__(self, prevX):
+        self.x = prevX + randrange(PIPE_WIDTH, 2 * PIPE_WIDTH) + PIPE_WIDTH
         self.width = PIPE_WIDTH
         self.height = randrange(PIPE_HEIGHT_MIN, PIPE_HEIGHT_MAX)
         self.y = PIPE_MAX - self.height
-        self.gap = PIPE_GAP_MAX # randrange(PIPE_GAP_MIN, PIPE_GAP_MAX)
+        self.gap = randrange(PIPE_GAP_MIN, PIPE_GAP_MAX)
         self.refUpper = PIPE_MAX - (self.height + self.gap)
         self.color = YELLOW
 
@@ -20,3 +20,9 @@ class Pipe:
 
     def isOnScreen(self) -> bool:
         return (self.x + self.width) > 0
+
+    def move(self) -> None:
+        self.x -= GAME_SPEED
+
+    def getX(self) -> int:
+        return self.x
