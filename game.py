@@ -4,6 +4,7 @@ import time
 import math
 from settings import *
 from bird import Bird
+from pipe import Pipe
 
 
 class Game:
@@ -16,10 +17,12 @@ class Game:
         self.fps = FPS
         self.backgrounds = []
         self.tickEvent = pygame.USEREVENT
+        self.pipeGenEvent = pygame.USEREVENT
         self.background_index = 0
         self.base = None
         self.baseX = BASE_WIDTH
         self.bird = None
+        self.pipes = list()
 
     def draw(self, win: pygame.Surface) -> None:
         win.fill(MID_BLACK)
@@ -32,6 +35,15 @@ class Game:
 
         self.bird.move()
         self.bird.draw(self.win)
+
+        for i in range(len(self.pipes) - 1, -1, -1):
+            pipe = self.pipes[i]
+            pipe.move()
+            if pipe.isOnScreen():
+                pipe.draw(win)
+            else:
+                self.pipes.remove(pipe)
+                del pipe
 
         pygame.display.update()
 
@@ -53,7 +65,8 @@ class Game:
         pygame.display.set_caption("Flappy Bird Developer")
 
         self.clock = pygame.time.Clock()
-        pygame.time.set_timer(self.tickEvent, 1200)
+        pygame.time.set_timer(self.tickEvent, EVENT_TICK_DELTA)
+        pygame.time.set_timer(self.pipeGenEvent, EVENT_PIPEGEN_DELTA)
 
         self.bird = Bird()
 
@@ -67,7 +80,7 @@ class Game:
         if self.baseX <= 0:
             self.baseX = BASE_WIDTH
 
-        self.baseX -= 2
+        self.baseX -= GAME_SPEED
 
         win.blit(self.base, (self.baseX - BASE_WIDTH, self.height - BASE_HEIGHT))
         win.blit(self.base, (self.baseX, self.height - BASE_HEIGHT))
@@ -99,10 +112,25 @@ class Game:
 
                 if event.type == self.tickEvent:
                     self.background_index += 1
+                    # self.pipes.append(Pipe())
                     if self.background_index == 20:
                         self.background_index = 0
                     # print(self.background_index)
 
+                if event.type == self.pipeGenEvent:
+
+                    if len(self.pipes) >= 10:
+                        # Failsafe to avoid too many pipes in the pipeline - :?)
+                        continue
+
+
+                    if len(self.pipes) == 0:
+                        self.pipes.append(Pipe(self.width))
+                    else:
+                        prevX = self.pipes[-1].getX()
+                        self.pipes.append(Pipe(prevX))
+                    print(len(self.pipes))
+                    
                     
             self.draw(self.win)
 
