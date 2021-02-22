@@ -31,8 +31,6 @@ class Game:
         win.blit(self.backgrounds[index], (0, 0))
         
         # win.blit(self.base, (0, 0))
-        self.draw_base(self.win)
-
         self.bird.move()
         self.bird.draw(self.win)
 
@@ -44,6 +42,8 @@ class Game:
             else:
                 self.pipes.remove(pipe)
                 del pipe
+
+        self.draw_base(self.win)
 
         pygame.display.update()
 
