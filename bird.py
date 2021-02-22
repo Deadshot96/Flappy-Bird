@@ -1,6 +1,7 @@
 import pygame
 import os
 from settings import *
+from typing import Tuple
 
 def LinearMap(x, maxX, minX, maxY, minY):
     return (x - minX) / (maxX - minX) * (maxY - minY) + minY
@@ -62,4 +63,7 @@ class Bird:
         self.upflap = pygame.transform.scale(self.upflap, (self.size, self.size))
         self.midflap = pygame.transform.scale(self.midflap, (self.size, self.size))
         self.downflap = pygame.transform.scale(self.downflap, (self.size, self.size))
+
+    def get_pos(self) -> Tuple:
+        return self.x, self.y
 
