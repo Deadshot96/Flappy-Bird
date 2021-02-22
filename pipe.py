@@ -12,10 +12,20 @@ class Pipe:
         self.gap = randrange(PIPE_GAP_MIN, PIPE_GAP_MAX)
         self.refUpper = PIPE_MAX - (self.height + self.gap)
         self.color = YELLOW
+        self.image = None
+        self.imgHeight = None
+
+        self.imgBtmRect = None
+        self.imgUprRect = None
+
+        self.load_images()
 
     def draw(self, win: pygame.Surface) -> None:
-        pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
-        pygame.draw.rect(win, self.color, (self.x, PIPE_MIN, self.width, self.refUpper))
+        # pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
+        # pygame.draw.rect(win, self.color, (self.x, PIPE_MIN, self.width, self.refUpper))
+
+        win.blit(self.imageBtm, (self.x, self.y))
+        win.blit(self.imageUpr, (self.x, PIPE_MIN))
 
 
     def isOnScreen(self) -> bool:
@@ -28,4 +38,11 @@ class Pipe:
         return self.x
 
     def load_images(self):
-        pass
+        image = pygame.image.load(os.path.join(ASSET_DIR, 'pipe.png'))
+        width, height = image.get_size()
+        self.imgHeight = height
+        # width, height = image.get_size()
+        # print(image.get_size())
+        self.imageBtm = pygame.transform.scale(image, (self.width, self.imgHeight))
+        self.imageUpr = pygame.transform.flip(image, False, True)
+        self.imageUpr = pygame.transform.scale(self.imageUpr, (self.width, self.imgHeight))
