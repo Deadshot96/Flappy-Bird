@@ -2,7 +2,7 @@ import pygame
 import os
 from settings import *
 
-def map(x, maxX, minX, maxY, minY):
+def LinearMap(x, maxX, minX, maxY, minY):
     return (x - minX) / (maxX - minX) * (maxY - minY) + minY
 
 class Bird:
@@ -17,18 +17,21 @@ class Bird:
         self.image = None
         self.angle = 0
         self.bird_index = 0
+        self.maxVel = MAXVEL
 
         self.load_images()
 
 
     def draw(self, win: pygame.Surface) -> None:
 
-        if self.vy < 0:
-            self.angle = 20
-        elif self.vy > 0:
-            self.angle = -20
-        else:
-            self.angle = 0
+        # if self.vy < 0:
+        #     self.angle = 20
+        # elif self.vy > 0:
+        #     self.angle = -20
+        # else:
+        #     self.angle = 0
+
+        self.angle = LinearMap(self.vy, 8, -8, -20, 20)
 
         self.image = [self.upflap, self.midflap, self.downflap][self.bird_index // 10]
         self.image = pygame.transform.rotate(self.image, self.angle)
@@ -40,7 +43,7 @@ class Bird:
         # pygame.draw.circle(win, self.color, (self.x, self.y), self.size // 2)
 
     def move(self):
-        self.vy += self.gravity
+        self.vy = min(self.maxVel, self.vy + self.gravity)
         self.y += self.vy
         self.y = int(self.y)
 
@@ -49,7 +52,7 @@ class Bird:
             self.bird_index = 0
 
     def jump(self):
-        self.vy = -8
+        self.vy = -self.maxVel
 
     def load_images(self):
         self.upflap = pygame.image.load(os.path.join(ASSET_DIR, 'upflap.png'))
