@@ -16,8 +16,8 @@ class Game:
         self.clock = None
         self.fps = FPS
         self.backgrounds = []
-        self.tickEvent = pygame.USEREVENT
-        self.pipeGenEvent = pygame.USEREVENT
+        self.tickEvent = pygame.event.Event(EVENT_TICK_TYPE)
+        self.gameOver = pygame.event.Event(EVENT_GAMEOVER_TYPE)
         self.background_index = 0
         self.base = None
         self.baseX = BASE_WIDTH
@@ -65,9 +65,8 @@ class Game:
         pygame.display.set_caption("Flappy Bird Developer")
 
         self.clock = pygame.time.Clock()
-        pygame.time.set_timer(self.tickEvent, EVENT_TICK_DELTA)
-        pygame.time.set_timer(self.pipeGenEvent, EVENT_PIPEGEN_DELTA)
-
+        pygame.time.set_timer(self.tickEvent.type, EVENT_TICK_DELTA)
+        
         self.bird = Bird()
 
         self.load_images()
@@ -110,15 +109,14 @@ class Game:
                     if keys[pygame.K_SPACE]:
                         self.bird.jump()
 
-                if event.type == self.tickEvent:
+                if event.type == self.tickEvent.type:
+                    # print("Tick: ", self.tickEvent, sep='\t')
                     self.background_index += 1
                     # self.pipes.append(Pipe())
                     if self.background_index == 20:
                         self.background_index = 0
-                    # print(self.background_index)
-
-                if event.type == self.pipeGenEvent:
-
+                
+                    # print("Pipe: ", self.pipeGenEvent, sep='\t')
                     if len(self.pipes) >= 10:
                         # Failsafe to avoid too many pipes in the pipeline - :?)
                         continue
@@ -129,10 +127,21 @@ class Game:
                     else:
                         prevX = self.pipes[-1].getX()
                         self.pipes.append(Pipe(prevX))
-                    print(len(self.pipes))
+                    # print(len(self.pipes))
+
+                if event.type == self.gameOver.type:
+                    print("Game Over")
                     
                     
             self.draw(self.win)
+
+            x, y = self.bird.get_pos()
+            
+            for pipe in self.pipes:
+                if pipe.isColliding(x, y):
+                    pygame.event.clear()
+                    pygame.event.post(self.gameOver)
+
 
         self.quit()
 
