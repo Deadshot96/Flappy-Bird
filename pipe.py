@@ -24,8 +24,12 @@ class Pipe:
         # pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.height))
         # pygame.draw.rect(win, self.color, (self.x, PIPE_MIN, self.width, self.refUpper))
 
-        win.blit(self.imageBtm, (self.x, self.y))
-        win.blit(self.imageUpr, (self.x, PIPE_MIN))
+        # win.blit(self.imageBtm, (self.x, self.y))
+        # win.blit(self.imageUpr, (self.x, PIPE_MIN))
+        self.update_rects()
+
+        win.blit(self.imageBtm, self.imgBtmRect)
+        win.blit(self.imageUpr, self.imgUprRect)
 
 
     def isOnScreen(self) -> bool:
@@ -40,9 +44,16 @@ class Pipe:
     def load_images(self):
         image = pygame.image.load(os.path.join(ASSET_DIR, 'pipe.png'))
         width, height = image.get_size()
-        self.imgHeight = height
+        self.imgHeight = max(self.height, height, self.refUpper)
         # width, height = image.get_size()
         # print(image.get_size())
         self.imageBtm = pygame.transform.scale(image, (self.width, self.imgHeight))
         self.imageUpr = pygame.transform.flip(image, False, True)
         self.imageUpr = pygame.transform.scale(self.imageUpr, (self.width, self.imgHeight))
+
+    def update_rects(self):
+        self.imgUprRect = self.imageUpr.get_rect()
+        self.imgUprRect.topleft = (self.x, -(self.imgHeight - self.refUpper))
+
+        self.imgBtmRect = self.imageBtm.get_rect()
+        self.imgBtmRect.topleft = (self.x, self.y)
