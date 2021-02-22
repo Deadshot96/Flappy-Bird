@@ -2,6 +2,9 @@ import pygame
 import os
 from settings import *
 
+def map(x, maxX, minX, maxY, minY):
+    return (x - minX) / (maxX - minX) * (maxY - minY) + minY
+
 class Bird:
 
     def __init__(self):
