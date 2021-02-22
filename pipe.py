@@ -26,3 +26,6 @@ class Pipe:
 
     def getX(self) -> int:
         return self.x
+
+    def load_images(self):
+        pass
