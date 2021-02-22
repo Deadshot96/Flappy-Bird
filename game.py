@@ -142,6 +142,11 @@ class Game:
                     pygame.event.clear()
                     pygame.event.post(self.gameOver)
 
+            if (y + BIRD_SIZE // 2) > (self.height - BASE_HEIGHT):
+                pygame.event.clear()
+                pygame.event.post(self.gameOver)
+
+
 
         self.quit()
 
