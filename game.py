@@ -19,6 +19,7 @@ class Game:
         self.tickEvent = pygame.event.Event(EVENT_TICK_TYPE)
         self.gameOver = pygame.event.Event(EVENT_GAMEOVER_TYPE)
         self.background_index = 0
+        self.gameOverFlag = False
         self.base = None
         self.baseX = BASE_WIDTH
         self.bird = None
@@ -67,9 +68,15 @@ class Game:
         self.clock = pygame.time.Clock()
         pygame.time.set_timer(self.tickEvent.type, EVENT_TICK_DELTA)
         
-        self.bird = Bird()
+        self.new_game()
 
         self.load_images()
+
+    def new_game(self):
+        self.bird = Bird()
+        self.pipes.clear()
+        self.background_index = 0
+
 
     def quit(self) -> None:
         pygame.font.quit()
@@ -92,6 +99,18 @@ class Game:
         run = True
         while run:
             self.clock.tick(self.fps)
+            if self.gameOverFlag:
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        run = False
+                    
+                    if event.type == pygame.KEYDOWN:
+                        keys = pygame.key.get_pressed()
+                        if keys[pygame.K_ESCAPE]:
+                            self.new_game()
+                            self.gameOverFlag = False
+                continue
+
             for event in pygame.event.get():
 
                 if event.type == pygame.QUIT:
@@ -131,6 +150,7 @@ class Game:
 
                 if event.type == self.gameOver.type:
                     print("Game Over")
+                    self.gameOverFlag = True
                     
                     
             self.draw(self.win)
