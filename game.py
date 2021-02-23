@@ -24,12 +24,14 @@ class Game:
         self.baseX = BASE_WIDTH
         self.bird = None
         self.pipes = list()
+        self.font = None
 
     def draw(self, win: pygame.Surface) -> None:
         win.fill(MID_BLACK)
 
         index = self.background_index // 10
         win.blit(self.backgrounds[index], (0, 0))
+
         
         # win.blit(self.base, (0, 0))
         self.bird.move()
@@ -45,7 +47,8 @@ class Game:
                 del pipe
 
         self.draw_base(self.win)
-
+        self.draw_title(self.win)
+        
         pygame.display.update()
 
     def load_images(self):
@@ -62,11 +65,16 @@ class Game:
 
     def game_init(self):
 
+        pygame.init()
+        pygame.font.init()
+
         self.win = pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption("Flappy Bird Developer")
 
         self.clock = pygame.time.Clock()
         pygame.time.set_timer(self.tickEvent.type, EVENT_TICK_DELTA)
+        
+        self.font = pygame.font.SysFont('comicsansms', 40)
         
         self.new_game()
 
@@ -76,6 +84,14 @@ class Game:
         self.bird = Bird()
         self.pipes.clear()
         self.background_index = 0
+
+    def draw_title(self, win: pygame.Surface):
+        title = self.font.render('Flappy Bird', 1, YELLOW)
+        width, height = title.get_size()
+        x = (self.width - width) // 2
+        y = (80 - height) // 2
+        win.blit(title, (x, y))
+
 
 
     def quit(self) -> None:
